@@ -1,14 +1,17 @@
 import re
+import pickle
 import numpy as np
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
+from src.exception import CustomException
+import os
 
 
 def clean_data(text):
     text = re.sub(r"[' ',()-->?¥]","",text)
     return text
 
-def outlier_treatment(series):
+def outlier_treatment(data,series):
     q1 = np.percentile(data[series], 25)
     q3 = np.percentile(data[series], 75)
     iqr = q3 - q1

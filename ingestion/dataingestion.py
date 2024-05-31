@@ -7,7 +7,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
 
-from preprocessing.utils import clean_data,outlier_treatment,sac
+from preprocessing.utils import clean_data,outlier_treatment
 
 @dataclass
 class DataIngestionConfig:
@@ -30,7 +30,7 @@ class DataIngestion:
             df.to_csv(self.ingestion_config.raw_data_path,index=False,header=True)
 
             logging.info("Train test split initiated")
-            train_set,test_set=train_test_split(df,test_size=0.2,random_state=42)
+            train_set,test_set=train_test_split(df,test_size=0.2,random_state=42,stratify=df['Potability'])
 
             train_set.to_csv(self.ingestion_config.train_data_path,index=False,header=True)
 
