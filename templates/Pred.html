@@ -1,0 +1,69 @@
+<html>
+    <body>
+        <h1>Is the water potable? Enter the follwing values to predict</h1>
+        <form action="{{ url_for('pred_page')}}" method="post">
+        <div class="mb-3">
+            <label class="form-label">Enter ph</label>
+            <input class="form-control" type="number" name="reading_score"
+                placeholder="Enter ph of water" min='0' max='14' />
+        </div>        
+        <div class="mb-3">
+            <label class="form-label">Hardness</label>
+            <input class="form-control" type="number" name="Hardness"
+                placeholder="Enter Hardness of water"/>
+        </div>
+            <div class="mb-3">
+            <label class="form-label">Solids</label>
+            <input class="form-control" type="number" name="Solids"
+                placeholder="Enter Solids of water" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Chloramines</label>
+            <input class="form-control" type="number" name="Chloramines"
+                placeholder="Enter Chloramines of water"/>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Sulfate</label>
+            <input class="form-control" type="number" name="Sulfate"
+                placeholder="Sulfate" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Conductivity</label>
+            <input class="form-control" type="number" name="Conductivity"
+                placeholder="Enter Conductivity of water"/>
+         </div> 
+         <div class="mb-3">
+            <label class="form-label">Organic_carbon</label>
+            <input class="form-control" type="number" name="Organic_carbon"
+                placeholder="Enter Organic_carbon of water" />    
+        </div>   
+        <div class="mb-3">
+            <label class="form-label">Trihalomethanes</label>
+            <input class="form-control" type="number" name="Trihalomethanes"
+                placeholder="Enter Trihalomethanes of water" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Turbidity</label>
+            <input class="form-control" type="number" name="Turbidity"
+                placeholder="Enter Turbidity of water"  />
+        </div>
+
+
+        <div class="mb-3">
+            <input class="btn btn-primary" type="submit" value="Predict if the water is potable!" required />
+        </div>
+    </form>
+
+        <h2>
+            THE  prediction is {{results}}
+         </h2>
+    </body>  
+
+
+
+</html>
+
+
+
+

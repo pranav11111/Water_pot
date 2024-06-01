@@ -13,7 +13,7 @@ from src.exception import CustomException
 from src.logger import logging
 import os
 
-from src.utils import clean_data,outlier_treatment
+from src.utils import clean_data,outlier_treatment,save_object
 
 
 
@@ -103,6 +103,10 @@ class DataTransformation:
             
 
             logging.info('completed creating data')
+
+
+            save_object(file_path= self.data_transformation_config.preprocessor_obj_file_path,obj= preproc_obj)
+
         
             return df_array
 
