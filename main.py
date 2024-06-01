@@ -1,13 +1,19 @@
-from src.dataingestion import DataIngestion
+from ingestion.dataingestion import DataIngestion
 from preprocessing.prepro import DataTransformation
+from Model.train import ModelTrainer
 import pandas as pd
 import numpy as np
 
 
 obj=DataIngestion()
-train_data,test_data=obj.initiate_data_ingestion()
+train_data,test_data,raw_data=obj.initiate_data_ingestion()
 
 dt = DataTransformation()
-train_array, test_array = dt.run_preprocessor(train_data,test_data)
+df_array= dt.run_preprocessor(raw_data)
 
-print(test_array[0])
+
+
+train_obj = ModelTrainer()
+f1 = train_obj.train(df_array)
+print(f1)
+

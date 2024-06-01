@@ -8,11 +8,12 @@ from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import MinMaxScaler
 
+
 from src.exception import CustomException
 from src.logger import logging
 import os
 
-from preprocessing.utils import clean_data,outlier_treatment
+from src.utils import clean_data,outlier_treatment
 
 
 
@@ -45,11 +46,14 @@ class DataTransformation:
             columns = ['ph', 'Hardness', 'Solids', 'Chloramines', 'Sulfate', 'Conductivity',
        'Organic_carbon', 'Trihalomethanes', 'Turbidity']
 
+
+            pl = Pipeline(steps = [('Imputer',SimpleImputer(strategy='mean')),
+                ('Scaler',MinMaxScaler())
+                ])
            
 
             prepocessor = ColumnTransformer([ 
-                ('Impute',SimpleImputer(strategy='median'),columns),
-                ('Scaling',MinMaxScaler(),columns)
+                ('transform',pl,columns)
                 ])
 
             logging.info('Created Preprocessor object')
@@ -60,46 +64,47 @@ class DataTransformation:
         except Exception as e:
             raise CustomException(e,sys)
 
-    def run_preprocessor(self, train_path,test_path):
+    def run_preprocessor(self, raw_data_path):
             
         try:
             logging.info("Entered Preprocessing")
 
-            train_df = pd.read_csv(train_path)
-            test_df = pd.read_csv(test_path)
+            df = pd.read_csv(raw_data_path)
 
-            features_train = train_df.drop('Potability',axis = 1 )
-            features_test = test_df.drop('Potability',axis =1)
+
+            features = df.drop('Potability',axis = 1 )
+            
+            
             
 
-            target_train = train_df['Potability']
-            target_test = test_df['Potability']
 
-            features_train = self.obj_to_num(features_train)
-            features_test  = self.obj_to_num(features_test)
+            target = df['Potability']
+            
+
+            features = self.obj_to_num(features)
+            
 
             logging.info('completed obj to num')
 
-            for i in features_train.columns:
-                features_train[i] = outlier_treatment(features_train,i)
+            for i in features.columns:
+                features[i] = outlier_treatment(features,i)
 
-            for i in features_test.columns:
-                features_test[i] = outlier_treatment(features_test,i)
+            
             
             logging.info('completed outlier treatment')
 
             preproc_obj = self.get_preprocessor()
-            feat_train_array = preproc_obj.fit_transform(features_train)
-            feat_test_array = preproc_obj.fit_transform(features_test)
+            featarray = preproc_obj.fit_transform(features)
+            
 
             logging.info('completed imputing and scaling')
 
-            train_array = np.c_[feat_train_array,np.array(target_train)]
-            test_array = np.c_[feat_test_array,np.array(target_test)]
+            df_array = np.c_[featarray, np.array(target)]
+            
 
             logging.info('completed creating data')
         
-            return train_array,test_array
+            return df_array
 
         except Exception as e:
 
